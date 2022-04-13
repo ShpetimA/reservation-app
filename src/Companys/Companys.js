@@ -24,7 +24,9 @@ const Companys = () => {
     fetchCompanys();
   },[])
   return (
-    <CompanyItems companys={companys}></CompanyItems>
+    <div>
+      <CompanyItems companys={companys}></CompanyItems>
+    </div>
   )
 }
 

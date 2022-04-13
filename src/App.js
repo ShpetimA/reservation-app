@@ -1,12 +1,18 @@
 
 import Companys from "./Companys/Companys";
+import {Container} from '@mui/material';
 
-
-
+const container = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems:'center'
+}
 
 function App() {
   return (
-    <Companys></Companys>
+    <Container sx={container}>
+      <Companys></Companys>
+    </Container>
   );
 }
 
