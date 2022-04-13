@@ -1,7 +1,12 @@
 
+import Companys from "./Companys/Companys";
+
+
+
+
 function App() {
   return (
-    <div>Hello</div>
+    <Companys></Companys>
   );
 }
 
