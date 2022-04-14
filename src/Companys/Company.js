@@ -1,6 +1,7 @@
 import { Box } from '@mui/material'
-import React from 'react'
+import {React,useState} from 'react'
 import TimeSlots from './TimeSlots'
+import {formatTime} from '../Utility/timeFunctions';
 
 const container = {
    display: 'flex',
@@ -30,8 +31,11 @@ const companyName = {
 
 
 const Company = (props) => {
+
+  const [reservation,setReservation] = useState({});
   const {name,time_slots} = props.company;
   const weekDays = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday']
+  const [selected,setSelected] = useState({});
 
   const filterTimeSlots = (time_slots,day) => {
     return time_slots.filter((time_slot)=>{
@@ -40,7 +44,17 @@ const Company = (props) => {
     })
   }
 
-  console.log(filterTimeSlots(time_slots,'Monday'));
+  const onReservation = (val,company,index,day) => {
+    if(Object.keys(selected).length === 0){
+      setReservation(val);
+      setSelected({ index: index , day: day});
+      props.onReservation(val,company)
+    }else{
+      setSelected({});
+      setReservation({});
+      props.onReservation({},company);
+    }
+  }
 
   return (
     <Box sx={container}>
@@ -48,16 +62,16 @@ const Company = (props) => {
           <h3>{name}</h3>
       </Box>
       <Box>
-        Reservation
+        { !reservation.start_time ? 'Reservation': `${formatTime(reservation.start_time)} - ${formatTime(reservation.end_time)}` }
       </Box>
       <Box sx={timeSlots}>
         <ul>
         {weekDays.map((day)=>{
-          return <><h4>
+          return <div key={day}><h4>
             {day}
           </h4>
-          <TimeSlots time_slots={filterTimeSlots(time_slots,day)}></TimeSlots> 
-          </>
+          <TimeSlots  time_slots={filterTimeSlots(time_slots,day)} company={name} onReservation={onReservation} reservations={props.reservations} day={day}  selected={selected}></TimeSlots> 
+          </div>
         })}  
         </ul>
       </Box>

@@ -1,6 +1,7 @@
 import React from 'react'
 import Company from './Company';
 import { Box } from '@mui/material';
+import { useState } from 'react';
 
 const container = {
   display: 'flex',
@@ -14,13 +15,18 @@ const container = {
 
 const CompanyItems = (props) => {
   const {companys} = props;
+  const [reservations,setReservations] = useState({});
+
+  const onReserve = (val,comp) => {
+    setReservations({...reservations,[comp] : val});
+  }
 
   return (
     <Box sx={container}>
 
     {companys.map((company)=>{
       return (
-        <Company company={company}></Company>
+        <Company key={company.name} company={company} onReservation={onReserve} reservations={reservations} ></Company>
         )
       }  
     )}
