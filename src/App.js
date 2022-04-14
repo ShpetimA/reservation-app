@@ -1,12 +1,11 @@
-
-import Companys from "./Companys/Companys";
-import {Container} from '@mui/material';
+import Companys from './Companys/Companys';
+import { Container } from '@mui/material';
 
 const container = {
   display: 'flex',
   justifyContent: 'center',
-  alignItems:'center'
-}
+  alignItems: 'center',
+};
 
 function App() {
   return (

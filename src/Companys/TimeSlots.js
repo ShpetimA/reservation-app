@@ -1,7 +1,7 @@
-import React from 'react'
-import { Box,Button } from '@mui/material';
+import React from 'react';
+import { Box, Button } from '@mui/material';
 import { styled } from '@mui/material';
-import {formatTime} from '../Utility/timeFunctions';
+import { formatTime } from '../Utility/timeFunctions';
 
 const BootstrapButton = styled(Button)({
   boxShadow: 'none',
@@ -41,43 +41,97 @@ const BootstrapButton = styled(Button)({
     boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
   },
 });
-const selectedStyle ={
+const selectedStyle = {
   boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
-}
+};
 
-const buttonContainer = { 
+const buttonContainer = {
   display: 'flex',
   flexDirection: 'column',
-  gap: '1rem'
-}
+  gap: '1rem',
+};
 
 const TimeSlots = (props) => {
   const time_slots = props.time_slots;
   const selected = props.selected;
 
-  const checkReservations = (time_slot,reservation,index) => {
-    if(reservation && props.day === new Date(reservation.start_time).toLocaleDateString('en-US',{weekday: 'long'})){
-       return (new Date(time_slot.start_time).getHours() >= new Date(reservation.start_time).getHours() && new Date(time_slot.start_time).getHours() < new Date(reservation.end_time).getHours()) || (new Date(time_slot.end_time).getHours() <= new Date(reservation.end_time).getHours() && new Date(time_slot.end_time).getHours() > new Date(reservation.start_time).getHours());
+  const checkReservations = (time_slot, reservation, index) => {
+    if (
+      reservation &&
+      props.day ===
+        new Date(reservation.start_time).toLocaleDateString('en-US', {
+          weekday: 'long',
+        })
+    ) {
+      return (
+        (new Date(time_slot.start_time).getHours() >=
+          new Date(reservation.start_time).getHours() &&
+          new Date(time_slot.start_time).getHours() <
+            new Date(reservation.end_time).getHours()) ||
+        (new Date(time_slot.end_time).getHours() <=
+          new Date(reservation.end_time).getHours() &&
+          new Date(time_slot.end_time).getHours() >
+            new Date(reservation.start_time).getHours())
+      );
     }
-  }
-  
-  const handleClick = (value,index) => () => {
-    props.onReservation(value,props.company,index,props.day);
-  }
+  };
+
+  const handleClick = (value, index) => () => {
+    props.onReservation(value, props.company, index, props.day);
+  };
 
   return (
     <Box>
       <Box sx={buttonContainer}>
-        {time_slots.map((time_slot,index)=>{
-          if((checkReservations(time_slot,props.reservations['Company 1'],index) || checkReservations(time_slot,props.reservations['Company 2'],index) || checkReservations(time_slot,props.reservations['Company 3'],index)) && (selected.index !== index || selected.day !== props.day)){
-            return <BootstrapButton disabled key={index} onClick={handleClick(time_slot,index)} >{formatTime(time_slot.start_time)} - {formatTime(time_slot.end_time)}</BootstrapButton>
-          }else{
-            return <BootstrapButton sx={selected.index===index && selected.day === props.day ? selectedStyle : ''}  key={index} onClick={handleClick(time_slot,index)} >{formatTime(time_slot.start_time)} - {formatTime(time_slot.end_time)}</BootstrapButton>
+        {time_slots.map((time_slot, index) => {
+          if (
+            (checkReservations(
+              time_slot,
+              props.reservations['Company 1'],
+              index
+            ) ||
+              checkReservations(
+                time_slot,
+                props.reservations['Company 2'],
+                index
+              ) ||
+              checkReservations(
+                time_slot,
+                props.reservations['Company 3'],
+                index
+              )) &&
+            (selected.index !== index || selected.day !== props.day)
+          ) {
+            return (
+              <BootstrapButton
+                disabled
+                key={index}
+                onClick={handleClick(time_slot, index)}
+              >
+                {formatTime(time_slot.start_time)} -{' '}
+                {formatTime(time_slot.end_time)}
+              </BootstrapButton>
+            );
+          } else {
+            return (
+              <BootstrapButton
+                sx={
+                  selected.index === index && selected.day === props.day
+                    ? selectedStyle
+                    : ''
+                }
+                key={index}
+                onClick={handleClick(time_slot, index)}
+              >
+                {formatTime(time_slot.start_time)} -{' '}
+                {formatTime(time_slot.end_time)}
+              </BootstrapButton>
+            );
           }
         })}
       </Box>
     </Box>
-  )
-}
+  );
+};
 
-export default TimeSlots
+export default TimeSlots;
