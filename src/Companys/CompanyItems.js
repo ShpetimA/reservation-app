@@ -4,8 +4,6 @@ import { Box } from '@mui/material';
 import { useState } from 'react';
 
 const container = {
-  width: '120rem',
-  height: '80vh',
   gap: '2rem',
   display: 'flex',
   alignItems: 'center',

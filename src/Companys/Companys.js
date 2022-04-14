@@ -23,11 +23,7 @@ const Companys = () => {
     };
     fetchCompanys();
   }, []);
-  return (
-    <div>
-      <CompanyItems companys={companys}></CompanyItems>
-    </div>
-  );
+  return <CompanyItems companys={companys}></CompanyItems>;
 };
 
 export default Companys;

@@ -9,7 +9,7 @@ const container = {
 
 function App() {
   return (
-    <Container sx={container}>
+    <Container maxWidth={false} sx={container}>
       <Companys></Companys>
     </Container>
   );
