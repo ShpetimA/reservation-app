@@ -37,9 +37,6 @@ const BootstrapButton = styled(Button)({
     backgroundColor: '#0062cc',
     borderColor: '#005cbf',
   },
-  '&:focus': {
-    boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
-  },
 });
 const selectedStyle = {
   boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
