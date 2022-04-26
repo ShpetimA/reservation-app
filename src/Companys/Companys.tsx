@@ -1,16 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import CompanyItems from './CompanyItems'
 
+export type timeSlotData = {
+    id: number
+    name: string
+    type: string
+    time_slots: Array<{
+        start_time: string
+        end_time: string
+    }>
+}
+
 const Companys = () => {
-    const [companys, setCompanys] = useState([])
+    const [companys, setCompanys] = useState<Array<timeSlotData>>([])
 
     useEffect(() => {
         const fetchCompanys = async () => {
             const resposne = await fetch(' http://localhost:3000/companys')
 
-            const responseData = await resposne.json()
-
-            const loadedData = responseData.map((item) => {
+            const responseData : Array<timeSlotData> = await resposne.json()
+            const loadedData = responseData.map((item : timeSlotData) => {
                 return {
                     id: item.id,
                     name: item.name,

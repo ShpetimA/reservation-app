@@ -8,7 +8,7 @@ const CompanysContainer = styled(Container)({
     alignItems: 'center',
 })
 
-function App() {
+const App = () => {
     return (
         <CompanysContainer maxWidth={false}>
             <Companys />
