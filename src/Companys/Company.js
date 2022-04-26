@@ -2,37 +2,38 @@ import { Box } from '@mui/material'
 import { React, useState } from 'react'
 import TimeSlots from './TimeSlots'
 import { timeFunctions } from '../Utility/timeFunctions'
+import { styled } from '@mui/material'
 
-const container = {
-    display: 'flex',
-    flexDirection: 'column',
-    gap: '1rem',
-    alignItems: 'center',
-    justifyContent: 'center',
-}
-
-const timeSlotsContainer = {
+const TimeSlotsContainer = styled(Box)({
     width: '15rem',
     height: '40rem',
     overflowY: 'scroll',
-}
+})
 
-const timeSlots = {
+const TimeSlotsReservation = styled(Box)({
     backgroundColor: 'aliceblue',
     justifyContent: 'center',
     display: 'flex',
     alignItems: 'center',
     flexDirection: 'column',
-}
+})
 
-const companyName = {
+const CompanyName = styled(Box)({
     padding: '2rem',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#bac8ff',
     height: '5rem',
-}
+})
+
+const CompanyContainer = styled(Box)({
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '1rem',
+    alignItems: 'center',
+    justifyContent: 'center',
+})
 
 const Company = (props) => {
     const [reservation, setReservation] = useState({})
@@ -72,21 +73,15 @@ const Company = (props) => {
     }
 
     return (
-        <Box sx={container}>
-            <Box sx={companyName}>
+        <CompanyContainer>
+            <CompanyName>
                 <h3>{name}</h3>
-            </Box>
-            <Box>
-                {!reservation.start_time
-                    ? 'Reservation'
-                    : `${timeFunctions.formatTime(
-                        reservation.start_time
-                    )} - ${timeFunctions.formatTime(reservation.end_time)}`}
-            </Box>
-            <Box sx={timeSlotsContainer}>
+            </CompanyName>
+            {!reservation.start_time ? 'Reservation' : `${timeFunctions.formatTime(reservation.start_time)} - ${timeFunctions.formatTime(reservation.end_time)}`}
+            <TimeSlotsContainer>
                 {weekDays.map((day) => {
                     return (
-                        <Box sx={timeSlots} key={day}>
+                        <TimeSlotsReservation key={day}>
                             <h4>{day}</h4>
                             <TimeSlots
                                 time_slots={filterTimeSlotsByDay(time_slots, day)}
@@ -96,11 +91,11 @@ const Company = (props) => {
                                 day={day}
                                 selected={selected}
                             />
-                        </Box>
+                        </TimeSlotsReservation>
                     )
                 })}
-            </Box>
-        </Box>
+            </TimeSlotsContainer>
+        </CompanyContainer>
     )
 }
 

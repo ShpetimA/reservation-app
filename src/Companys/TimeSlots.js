@@ -42,11 +42,11 @@ const selectedStyle = {
     boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
 }
 
-const buttonContainer = {
+const ButtonsContainer = styled(Box)({
     display: 'flex',
     flexDirection: 'column',
     gap: '1rem',
-}
+})
 
 const TimeSlots = (props) => {
     const time_slots = props.time_slots
@@ -78,15 +78,14 @@ const TimeSlots = (props) => {
     }
 
     return (
-        <Box>
-            <Box sx={buttonContainer}>
-                {time_slots.map((time_slot, index) => {
-                    if (
-                        (checkReservations(
-                            time_slot,
-                            props.reservations['Company 1'],
-                            index
-                        ) ||
+        <ButtonsContainer>
+            {time_slots.map((time_slot, index) => {
+                if (
+                    (checkReservations(
+                        time_slot,
+                        props.reservations['Company 1'],
+                        index
+                    ) ||
               checkReservations(
                   time_slot,
                   props.reservations['Company 2'],
@@ -98,36 +97,35 @@ const TimeSlots = (props) => {
                   index
               )) &&
             (selected.index !== index || selected.day !== props.day)
-                    ) {
-                        return (
-                            <BootstrapButton
-                                disabled
-                                key={index}
-                                onClick={handleClick(time_slot, index)}
-                            >
-                                {timeFunctions.formatTime(time_slot.start_time)}
-                                {' -'} {timeFunctions.formatTime(time_slot.end_time)}
-                            </BootstrapButton>
-                        )
-                    } else {
-                        return (
-                            <BootstrapButton
-                                sx={
-                                    selected.index === index && selected.day === props.day
-                                        ? selectedStyle
-                                        : ''
-                                }
-                                key={index}
-                                onClick={handleClick(time_slot, index)}
-                            >
-                                {timeFunctions.formatTime(time_slot.start_time)}
-                                {' -'} {timeFunctions.formatTime(time_slot.end_time)}
-                            </BootstrapButton>
-                        )
-                    }
-                })}
-            </Box>
-        </Box>
+                ) {
+                    return (
+                        <BootstrapButton
+                            disabled
+                            key={index}
+                            onClick={handleClick(time_slot, index)}
+                        >
+                            {timeFunctions.formatTime(time_slot.start_time)}
+                            {' -'} {timeFunctions.formatTime(time_slot.end_time)}
+                        </BootstrapButton>
+                    )
+                } else {
+                    return (
+                        <BootstrapButton
+                            sx={
+                                selected.index === index && selected.day === props.day
+                                    ? selectedStyle
+                                    : ''
+                            }
+                            key={index}
+                            onClick={handleClick(time_slot, index)}
+                        >
+                            {timeFunctions.formatTime(time_slot.start_time)}
+                            {' -'} {timeFunctions.formatTime(time_slot.end_time)}
+                        </BootstrapButton>
+                    )
+                }
+            })}
+        </ButtonsContainer>
     )
 }
 

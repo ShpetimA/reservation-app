@@ -1,18 +1,18 @@
 import Companys from './Companys/Companys'
-import { Container } from '@mui/material'
+import { Container, styled } from '@mui/material'
 import React from 'react'
 
-const container = {
+const CompanysContainer = styled(Container)({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-}
+})
 
 function App() {
     return (
-        <Container maxWidth={false} sx={container}>
+        <CompanysContainer maxWidth={false}>
             <Companys />
-        </Container>
+        </CompanysContainer>
     )
 }
 
