@@ -1,8 +1,12 @@
 import { Box } from '@mui/material'
-import { React, useState } from 'react'
+import { useState } from 'react'
+import React from 'react'
 import TimeSlots from './TimeSlots'
 import { timeFunctions } from '../Utility/timeFunctions'
 import { styled } from '@mui/material'
+import { ReservationType, ReservationsType } from './CompanyItems'
+
+import { timeSlotData } from './Companys'
 
 const TimeSlotsContainer = styled(Box)({
     width: '15rem',
@@ -35,8 +39,15 @@ const CompanyContainer = styled(Box)({
     justifyContent: 'center',
 })
 
-const Company = (props) => {
-    const [reservation, setReservation] = useState({})
+type CompanyProps = {
+    key: string
+    company: timeSlotData
+    onReservation: (val : ReservationType, company: string) => void,
+    reservations: ReservationsType
+}
+
+const Company = (props : CompanyProps) => {
+    const [reservation, setReservation] = useState({start_time:'', end_time: ''})
     const { name, time_slots } = props.company
     const weekDays = [
         'Monday',
@@ -47,9 +58,9 @@ const Company = (props) => {
         'Saturday',
         'Sunday',
     ]
-    const [selected, setSelected] = useState({})
+    const [selected, setSelected] = useState({index: -1, day: ''})
 
-    const filterTimeSlotsByDay = (time_slots, day) => {
+    const filterTimeSlotsByDay = (time_slots : Array<ReservationType>, day:string) => {
         return time_slots.filter((time_slot) => {
             const [weekDay] = [
                 new Date(time_slot.start_time).toLocaleDateString('en-US', {
@@ -60,15 +71,15 @@ const Company = (props) => {
         })
     }
 
-    const onReservation = (val, company, index, day) => {
-        if (Object.keys(selected).length === 0) {
+    const onReservation = (val : ReservationType, company: string, index: number, day: string) => {
+        if (selected.index === -1) {
             setReservation(val)
             setSelected({ index: index, day: day })
             props.onReservation(val, company)
         } else {
-            setSelected({})
-            setReservation({})
-            props.onReservation({}, company)
+            setSelected({index: -1, day: ''})
+            setReservation({start_time: '', end_time:''})
+            props.onReservation({start_time: '', end_time:''}, company)
         }
     }
 

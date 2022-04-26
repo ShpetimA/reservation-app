@@ -29,7 +29,7 @@ const CompanysContainer = styled(Box)({
 const CompanyItems = ({companys} : CompanyItemsProps) => {
     const [reservations, setReservations] = useState<ReservationsType>({})
 
-    const onReserve = (val : ReservationType , comp : string) : void => {
+    const onReserve = (val : ReservationType, comp : string) : void => {
         setReservations({ ...reservations, [comp]: val })
     }
 

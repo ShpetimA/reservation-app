@@ -2,6 +2,7 @@ import React from 'react'
 import { Box, Button } from '@mui/material'
 import { styled } from '@mui/material'
 import { timeFunctions } from '../Utility/timeFunctions'
+import { ReservationsType, ReservationType } from './CompanyItems'
 
 const BootstrapButton = styled(Button)({
     boxShadow: 'none',
@@ -48,11 +49,23 @@ const ButtonsContainer = styled(Box)({
     gap: '1rem',
 })
 
-const TimeSlots = (props) => {
+type TimeSlotsProps = {
+    time_slots: Array<ReservationType>
+    company: string
+    onReservation: (val: ReservationType, company: string, index: number, day: string) => void
+    reservations: ReservationsType
+    day: string
+    selected: {
+        index: number
+        day: string
+    }
+}
+
+const TimeSlots = (props : TimeSlotsProps) => {
     const time_slots = props.time_slots
     const selected = props.selected
 
-    const checkReservations = (time_slot, reservation) => {
+    const checkReservations = (time_slot : ReservationType, reservation : ReservationType) => {
         if (
             reservation &&
       props.day ===
@@ -73,7 +86,7 @@ const TimeSlots = (props) => {
         }
     }
 
-    const handleClick = (value, index) => () => {
+    const handleClick = (value : ReservationType, index: number) => () => {
         props.onReservation(value, props.company, index, props.day)
     }
 
@@ -84,17 +97,14 @@ const TimeSlots = (props) => {
                     (checkReservations(
                         time_slot,
                         props.reservations['Company 1'],
-                        index
                     ) ||
               checkReservations(
                   time_slot,
                   props.reservations['Company 2'],
-                  index
               ) ||
               checkReservations(
                   time_slot,
                   props.reservations['Company 3'],
-                  index
               )) &&
             (selected.index !== index || selected.day !== props.day)
                 ) {
@@ -114,7 +124,7 @@ const TimeSlots = (props) => {
                             sx={
                                 selected.index === index && selected.day === props.day
                                     ? selectedStyle
-                                    : ''
+                                    : undefined
                             }
                             key={index}
                             onClick={handleClick(time_slot, index)}
