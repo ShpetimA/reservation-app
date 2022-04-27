@@ -62,52 +62,41 @@ type TimeSlotsProps = {
 }
 
 const TimeSlots = (props : TimeSlotsProps) => {
-    const time_slots = props.time_slots
-    const selected = props.selected
+    const {time_slots, selected, reservations, company, day, onReservation} = props
 
-    const checkReservations = (time_slot : ReservationType, reservation : ReservationType) => {
-        if (
-            reservation &&
-      props.day ===
-        new Date(reservation.start_time).toLocaleDateString('en-US', {
-            weekday: 'long',
-        })
-        ) {
-            return (
-                (new Date(time_slot.start_time).getHours() >=
-          new Date(reservation.start_time).getHours() &&
-          new Date(time_slot.start_time).getHours() <
-            new Date(reservation.end_time).getHours()) ||
-        (new Date(time_slot.end_time).getHours() <=
-          new Date(reservation.end_time).getHours() &&
-          new Date(time_slot.end_time).getHours() >
-            new Date(reservation.start_time).getHours())
-            )
+    const checkReservations = (time_slot : ReservationType, reservations : ReservationsType) => {
+        if (Object.keys(reservations).length === 0) {
+            return false
         }
+        for (const reservation in reservations) {
+            if (reservation && props.day === new Date(reservations[reservation].start_time).toLocaleDateString('en-US', {weekday: 'long', })) {
+                if (checkTimeSlotAvailability(time_slot, reservations[reservation])) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+    
+    const checkTimeSlotAvailability = (time_slot : ReservationType, reservation: ReservationType) => {
+        const reservationEnd = new Date(reservation.end_time).getHours()
+        const reservationStart = new Date(reservation.start_time).getHours()
+        const timeEnd = new Date(time_slot.end_time).getHours()
+        const timeStart = new Date(time_slot.start_time).getHours()
+
+        return ((timeStart >= reservationStart && timeStart < reservationEnd)
+            ||
+            (timeEnd <= reservationEnd && timeEnd > reservationStart))
     }
 
     const handleClick = (value : ReservationType, index: number) => () => {
-        props.onReservation(value, props.company, index, props.day)
+        onReservation(value, company, index, day)
     }
 
     return (
         <ButtonsContainer>
             {time_slots.map((time_slot, index) => {
-                if (
-                    (checkReservations(
-                        time_slot,
-                        props.reservations['Company 1'],
-                    ) ||
-              checkReservations(
-                  time_slot,
-                  props.reservations['Company 2'],
-              ) ||
-              checkReservations(
-                  time_slot,
-                  props.reservations['Company 3'],
-              )) &&
-            (selected.index !== index || selected.day !== props.day)
-                ) {
+                if ((checkReservations(time_slot, reservations)) && (selected.index !== index || selected.day !== day)) {
                     return (
                         <BootstrapButton
                             disabled
@@ -122,7 +111,7 @@ const TimeSlots = (props : TimeSlotsProps) => {
                     return (
                         <BootstrapButton
                             sx={
-                                selected.index === index && selected.day === props.day
+                                selected.index === index && selected.day === day
                                     ? selectedStyle
                                     : undefined
                             }
