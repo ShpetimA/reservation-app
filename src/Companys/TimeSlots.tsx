@@ -4,8 +4,8 @@ import { styled } from '@mui/material'
 import { timeFunctions } from '../Utility/timeFunctions'
 import { ReservationsType, ReservationType } from './CompanyItems'
 
-const BootstrapButton = styled(Button)({
-    boxShadow: 'none',
+const BootstrapButton = styled(Button)<{selected?: boolean}>(p => ({
+    boxShadow: p.selected ? '0 0 0 0.2rem rgba(0,123,255,.5)' : '',
     textTransform: 'none',
     width: '10rem',
     fontSize: 16,
@@ -38,11 +38,7 @@ const BootstrapButton = styled(Button)({
         backgroundColor: '#0062cc',
         borderColor: '#005cbf',
     },
-})
-const selectedStyle = {
-    boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
-}
-
+}))
 const ButtonsContainer = styled(Box)({
     display: 'flex',
     flexDirection: 'column',
@@ -96,33 +92,19 @@ const TimeSlots = (props : TimeSlotsProps) => {
     return (
         <ButtonsContainer>
             {time_slots.map((time_slot, index) => {
-                if ((checkReservations(time_slot, reservations)) && (selected.index !== index || selected.day !== day)) {
-                    return (
-                        <BootstrapButton
-                            disabled
-                            key={index}
-                            onClick={handleClick(time_slot, index)}
-                        >
-                            {timeFunctions.formatTime(time_slot.start_time)}
-                            {' -'} {timeFunctions.formatTime(time_slot.end_time)}
-                        </BootstrapButton>
-                    )
-                } else {
-                    return (
-                        <BootstrapButton
-                            sx={
-                                selected.index === index && selected.day === day
-                                    ? selectedStyle
-                                    : undefined
-                            }
-                            key={index}
-                            onClick={handleClick(time_slot, index)}
-                        >
-                            {timeFunctions.formatTime(time_slot.start_time)}
-                            {' -'} {timeFunctions.formatTime(time_slot.end_time)}
-                        </BootstrapButton>
-                    )
-                }
+                const isSelected = selected.index === index && selected.day === day
+                const isDisabled = checkReservations(time_slot, reservations) && (selected.index !== index || selected.day !== day)
+                return (
+                    <BootstrapButton
+                        selected={isSelected}
+                        disabled = {isDisabled}
+                        key={index}
+                        onClick={handleClick(time_slot, index)}
+                    >
+                        {timeFunctions.formatTime(time_slot.start_time)}
+                        {' -'} {timeFunctions.formatTime(time_slot.end_time)}
+                    </BootstrapButton>
+                )
             })}
         </ButtonsContainer>
     )
